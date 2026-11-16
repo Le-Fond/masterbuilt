@@ -66,12 +66,34 @@ be split (for example one app ticket at a time if they all touch the project fil
 A session writes its results to its STATUS file as it goes (`assets/status-template.md`) and stops at
 `State: READY FOR AUDIT`. A design gap is a question in STATUS, not something the builder decides.
 
+#### Starting a builder
+
+Create the worktree from the integration branch, then start a session in it with the model the ticket names:
+
+```bash
+git worktree add ../<repo>-t01 -b t01-<slug> <integration-branch>
+cd ../<repo>-t01
+claude --model opus "<the brief from assets/session-brief-template.md>"
+```
+
+If the coordinator is itself running in Claude Code, it can instead start the builder as a subagent with a
+model setting and worktree isolation, and send follow-ups to that same subagent. Either way the builder
+sees only its brief, never the planning conversation.
+
 ### 6. Audit
 A session's report is a claim, not proof. When a ticket reports ready:
 
 1. Check for yourself that every acceptance check has a result and the diff stays inside the ticket's files.
-2. Have the auditor re-run the checks and read the diff (`assets/audit-prompt-template.md`). The auditor
-   appends findings, scores and one verdict to STATUS. It edits no code.
+2. Have the auditor re-run the checks and read the diff (`assets/audit-prompt-template.md`). Run it in a
+   read-only sandbox so it cannot edit anything, and have it write its report as its final message:
+
+   ```bash
+   codex exec -s read-only -C ../<repo>-t01 -o audit-T01-r1.md - < audit-prompt-T01.md
+   ```
+
+   The prompt comes from a file, so the auditor never waits for input. The coordinator appends the report
+   (findings, scores, one verdict) under `## Audit` in the ticket's STATUS, unchanged. Add `-m <model>` to
+   pick the auditor's model. Any auditor from a different model family works the same way.
 3. At most two rounds. Only a **blocking** finding returns a ticket: a failing acceptance check, wrong
    behaviour on an input that will really occur, a privacy or safety leak, or a broken contract another
    ticket depends on. "It can be constructed" is recorded, not fixed. Auditors over-defend; the coordinator
@@ -111,5 +133,5 @@ audit findings honestly, including the ones you chose not to fix and why.
 - **Trusting reports.** Always look at the diff and the STATUS before auditing or merging.
 - **Late integration.** Each ticket is tested alone. Plan an explicit end-to-end drill ticket and an
   assembly ticket that runs the full suites on the merged branch.
-- **A hung auditor.** Run it with input closed and in the background; if it writes nothing for far longer
-  than earlier audits took, stop it and run it again.
+- **A hung auditor.** Run it with its prompt read from a file (input closed) and in the background; if it
+  writes nothing for far longer than earlier audits took, stop it and run it again.

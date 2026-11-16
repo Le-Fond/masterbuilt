@@ -1,5 +1,5 @@
 #!/bin/sh
-# Installs the masterbuilt skill for Claude Code on this Mac.
+# Installs the masterbuilt skill for Claude Code for the current user (macOS or Linux).
 set -e
 here="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p "$HOME/.claude/skills"

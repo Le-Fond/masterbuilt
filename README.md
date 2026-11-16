@@ -15,18 +15,22 @@ than it saves.
 - `skills/masterbuilt/assets/`: templates for a ticket, a STATUS file, a builder brief, an audit
   prompt and the board.
 
+## Requirements
+
+- [Claude Code](https://claude.com/claude-code), for the coordinator and the builders.
+- An auditor from a different model family. The skill's examples use the OpenAI Codex CLI
+  (`codex exec`, run read-only); any other CLI agent you can point at a worktree works the same way.
+- Git, since every ticket runs in its own worktree.
+
 ## Install
 
-Copy the skill folder into your Claude Code skills directory:
-
 ```bash
-git clone https://github.com/AgentPlutus/masterbuilt.git
-cp -r masterbuilt/skills/masterbuilt ~/.claude/skills/
+git clone https://github.com/SyGnostique/masterbuilt.git
+sh masterbuilt/install.sh
 ```
 
-Or, from the zip: unzip it and run `sh masterbuilt/install.sh`.
-
-Then ask Claude Code to plan a large piece of work, or say "use masterbuilt".
+This copies `skills/masterbuilt` to `~/.claude/skills/masterbuilt`, replacing any earlier copy. Start a new
+Claude Code session, then ask it to plan a large piece of work, or say "use masterbuilt".
 
 ## The eight steps
 
@@ -38,3 +42,7 @@ Then ask Claude Code to plan a large piece of work, or say "use masterbuilt".
 6. **Audit.** Re-run the checks, read the diff, two rounds at most, only blocking findings return a ticket.
 7. **Merge.** Re-run tests on the merged branch, update the board, start what was unblocked.
 8. **Stop at the user's steps.** Production, account steps and judging go to the user, together.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -20,6 +20,6 @@ Changes needed in files this ticket does not own, exact enough for the coordinat
 ## Questions (design gaps, not decided here)
 
 ## Audit
-(The auditor appends here. Nothing above is deleted.)
+(The coordinator appends each audit report here, unchanged. Nothing above is deleted.)
 
 ## Known limits accepted

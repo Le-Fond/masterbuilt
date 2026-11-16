@@ -12,15 +12,15 @@ Then:
    behaviour that differs from the spec, missing failure cases, tests that would still pass without the
    change, any path by which user text, tokens or personal data reach logs or analytics, changes to
    behaviour with the feature switched off, and edits outside the ticket's files.
-3. Do not edit code. The only file you may change is `T00-STATUS.md`, by appending.
-4. Append, deleting nothing:
+3. Do not edit any file. You run read-only; the coordinator appends your report to `T00-STATUS.md`.
+4. Your final message is the report, with these sections:
    - `### Audit round N acceptance results`: each check, the command you ran, the actual result.
    - `### Audit round N findings`: each finding as blocking or recorded, with file:line, and for a blocking
      one a realistic scenario in this product and the recommended fix.
    - `### Audit round N scores`: correctness, checks, safety and privacy, compatibility, ownership, tests,
      simplicity; each 0 to 3 with one line of evidence.
    - `### Audit round N verdict`: exactly one of `PASS`, `RETURN`, `STOP`.
-5. Do not change the `State:` line.
+5. Do not suggest a change to the `State:` line; the coordinator sets it.
 
 Only blocking findings can return a ticket: a failing acceptance check, wrong behaviour on an input that
 will really occur, a privacy or safety leak, or a broken contract another ticket depends on. "It can be
